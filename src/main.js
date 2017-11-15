@@ -13,12 +13,20 @@ new Vue({
         return {
             message: '',
             nom: 'Dupont',
-            prenom: 'Jean'
+            prenom: 'Jean',
+            search: '',
+            isRed: false,
+            personnes: ['abcd', 'fesf', 'sdfs']
         };
     },
     computed: {
         nomComplet() {
             return `${this.nom} ${this.prenom}`;
+        },
+        personnesFiltered() {
+            return this.personnes.filter((p) => {
+                return p.includes(this.search);
+            });
         }
     },
     methods: {
@@ -26,7 +34,13 @@ new Vue({
             this.message += ' Bonjour!';
         },
         addToList() {
-            this.personnes.push(this.message);
+            if (this.message.length > 0) {
+                this.personnes.push(this.message);
+                this.message = '';
+            }
+        },
+        removeItem(i) {
+            this.personnes.splices(i, 1);
         }
     },
     filters: {

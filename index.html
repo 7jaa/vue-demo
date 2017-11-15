@@ -17,13 +17,13 @@
       <input type="checkbox" v-model="isRed" />
       <button v-on:click="addToList()">Ajouter</button>
 
+      <button v-on:click="bonjour()" v-if="message.length > 0">Bonjour</button>
+      <button v-on:click="personnesFiltered()">Filtrer</button>
       <ul>
-          <li v-for="(p, i) in personnes" v-bind:key="1">
-              #{{i + 1}} {{ p }}
+          <li v-for="(p, i) in personnesFiltered" v-bind:key="i">
+              #{{i + 1}} {{ p }} <button v-on:click="removeItem(i)">X</button>
           </li>
       </ul>
-
-      <button v-on:click="bonjour()" v-if="message.length > 0">Bonjour</button>
       <h2>{{ message |  maj}}</h2>
       <h2 v-bind:class="{'red' : isRed}">{{ nomComplet }}</h2>
     </div>
