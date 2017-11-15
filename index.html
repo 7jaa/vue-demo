@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>demo-vue</title>
+    <style>
+          .red {
+              color: rgba(243, 11, 11, 0.81);
+          }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Hello vue</h1>
+      <input type="text" v-model="message" />
+      <input type="checkbox" v-model="isRed" />
+      <button v-on:click="addToList()">Ajouter</button>
+
+      <ul>
+          <li v-for="(p, i) in personnes" v-bind:key="1">
+              #{{i + 1}} {{ p }}
+          </li>
+      </ul>
+
+      <button v-on:click="bonjour()" v-if="message.length > 0">Bonjour</button>
+      <h2>{{ message |  maj}}</h2>
+      <h2 v-bind:class="{'red' : isRed}">{{ nomComplet }}</h2>
+    </div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>

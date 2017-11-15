@@ -1,0 +1,195 @@
+vue init webpack demo-vue
+
+
+AJOUT  README
+install plugin vetur
+améliore vue
+
+changer le truc avec rule{}
+
+il a fallu faire un npm install eslint à un moment, ajouter cette étape
+
+dans vetur,
+fichier, préférence, user settings, chercher eslint.validate
+on le copie dans le fichier utilisateur (click sur petit bouton à gauche "Copier dans les paramètres"
+et on rajoute (virgule à la ligne précédente) et "vue" pour dire que les fichiers à extension .vue seront traités
+
+
+
+RESUME
+dans l'ordre:
+1. vue init webpack nomprojet dans la console
+(mettre bons parametres ET YES pour router!!)
+2. npm install dans le terminal visual studio code
+3. faire le uninistall vue si... on avait besoin de vue QUE pour créer le projet. Pour notre
+vue-demo, on en a besoin après donc on désinstalle pas
+4. les rules dans le eslint
+5. le indent size dans le editorconfig (demande 2 tabs au lieu de 1)
+(respecter les semi colone aussi, les espaces avant les { et les NON espaces avant les (
+6. le devtool: 'source-map', dans le build/webpack.dev.conf
+7. le * text eol=lf dans le gitattributes
+8. 
+
+
+git init pour avoir un git
+
+
+SPECIFI A NOTRE VUE-DEMO (étapes qu'on a fait)
+1.
+<div id="app">
+      <h1>Hello vue</h1>
+      <input type="text" v-model="message" />
+      <h2>{{message}}</h2>
+    </div>
+dans index.html
+
+2.
+data() {
+        return {
+            message: ''
+        };
+    },
+dans main.js
+
+3.
+metter en commentaire
+/* router
+template: '<App/>',
+components: { App } */
+dans main.js pour qu'on ne voit pas l'itnerface de base dans la page, mais qu'on voit
+notre truc à nous
+
+4.
+mettre
+// import App from './App';
+// import router from './router';
+en commentaire
+à cause de notre règle eslint http://eslint.org/docs/rules/no-unused-vars
+
+5.
+mettre la chaine message en majuscule
+<h2>{{ message.toUpperCase() }}</h2>
+dans index.html
+
+6.
+si on veut le faire pas que à 1 endroit mais à plusieurs (au lieu de rééecrire meme chose à cahque fois)
+on créer un filtre maj par exemple.
+filters: {
+        maj(text) {
+            return text.toUpperCase();
+        }
+    }
+dans main.js
+
+7.
+pour tester point 6., on ajoute variables nom et prenom (pour en avoir plus que 1 qui est "message")
+data() {
+        return {
+            message: '',
+            nom: 'Dupont',
+            prenom: 'Jean'
+        };
+    },
+dans main.js
+
+8.
+maintenant, suite au 7. on peut faire
+<div id="app">
+      <h1>Hello vue</h1>
+      <input type="text" v-model="message" />
+      <h2>{{ message |  maj}}</h2>
+      <h2>{{ message |  }}</h2>
+      <h2>{{ nom }} {{ prenom }}</h2>
+      <h2>{{ nom + ' ' + prenom }}</h2>
+      <h2>{{ nomComplet }}</h2>
+    </div>
+dans index.html
+
+9.
+tout marche sauf nomComplet. Pour qu'il marche, il faudrait faire une fonction. Mais la fonction
+serait calculé h24 dès qu'on change le texte d'1 lettre même --> pas idéal
+pour résoudre ça, on a les méthodes calculées. Elles gardent en cache et se recalcul seulement
+quand la variable change
+donc
+computed: {
+        nomComplet() {
+            return `${this.nom} ${this.prenom}`;
+        }
+    },
+dans main.js
+ATTENTION ce ne sont pas des () mais des {}, et ce ne sont pas des guillemets ' mais des
+accents graves ` (SHIFT+^)
+le this. car on s'appelle nous-meme puisque dans le .html on est dans "app" également! Et dans
+le .js aussi on est dans "app" 
+
+10.
+on créé un boutton qui appelle la méthode bonjour()
+<div id="app">
+      <h1>Hello vue</h1>
+      <input type="text" v-model="message" />
+      <button v-on:click="bonjour()">Bonjour</button>
+      <h2>{{ message |  maj}}</h2>
+      <h2>{{ nomComplet }}</h2>
+    </div>
+dans le .html
+
+11.
+il faut aller créer cette methode dans le .js
+methods: {
+        bonjour() {
+            this.message += ' Bonjour!';
+        }
+    },
+	
+12.
+bouton pour faire en rouge si on veut
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>demo-vue</title>
+    <style>
+          .red {
+              color: rgba(243, 11, 11, 0.81);
+          }
+    </style>
+  </head>
+ 
+ puis
+ 
+ <div id="app">
+      <h1>Hello vue</h1>
+      <input type="text" v-model="message" />
+      <input type="checkbox" v-model="isRed" />
+      <button v-on:click="bonjour()">Bonjour</button>
+      <h2>{{ message |  maj}}</h2>
+      <h2 v-bind:class="{'red' : isRed}">{{ nomComplet }}</h2>
+    </div>
+	
+13.
+pour le boutton cacher si ya rien d'écrit
+
+
+      <button v-on:click="bonjour()" v-if="message.length > 0">Bonjour</button>
+	  
+14.
+ajouter les personnes dans une liste
+dans le.html
+<body>
+    <div id="app">
+      <h1>Hello vue</h1>
+      <input type="text" v-model="message" />
+      <input type="checkbox" v-model="isRed" />
+      <button v-on:click="addToList()">Ajouter</button>
+
+      <ul>
+          <li v-for="(p, i) in personnes" v-bind-key="1">
+              MANQUE QQCH ICI {{ p }}
+          </li>
+      </ul>
+	 
+dans le .js
+addToList() {
+            this.personnes.push(this.message);
+        }
+		
+15.
